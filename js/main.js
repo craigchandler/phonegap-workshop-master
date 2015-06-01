@@ -56,7 +56,7 @@ var app = {
             });
         }
 		$(window).on('hashchange', $.proxy(this.route, this));
-		$(document).on('deviceready', , $.proxy(this.onDeviceReady, this));
+		$(document).on('deviceready', $.proxy(this.onDeviceReady, this));
     },
 
 	slidePage: function(page) {
