@@ -30,4 +30,6 @@
     <feature name="http://api.phonegap.com/1.0/network"/>
     <feature name="http://api.phonegap.com/1.0/notification"/>
  
+     <gap:plugin name="io.litehelpers.cordova.sqlite" version="0.7.6" />
+	 
 </widget>
