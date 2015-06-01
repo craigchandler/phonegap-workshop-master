@@ -1,25 +1,32 @@
 var app = {
 
     route: function() {
-    var self = this;
-    var hash = window.location.hash;
-    if (!hash) {
-        if (this.homePage) {
-            this.slidePage(this.homePage);
-        } else {
-            this.homePage = new HomeView(this.store).render();
-            this.slidePage(this.homePage);
+        var self = this;
+        var hash = window.location.hash;
+        if (!hash) {
+            if (this.homePage) {
+                this.slidePage(this.homePage);
+            } else {
+                this.homePage = new HomeView(this.store).render();
+                this.slidePage(this.homePage);
+            }
+            return;
         }
-        return;
-    }
-    var match = hash.match(this.detailsURL);
-    if (match) {
-        this.store.findById(Number(match[1]), function(employee) {
-            self.slidePage(new EmployeeView(employee).render());
-        });
-    }
+        var match = hash.match(this.detailsURL);
+        if (match) {
+            this.store.findById(Number(match[1]), function(employee) {
+                self.slidePage(new EmployeeView(employee).render());
+            });
+        }
     },
 
+	onDeviceReady: function() {
+		var self = this;
+        this.store = new SQLiteStore(function() {
+            self.route();
+        });
+    },
+	
 	showAlert: function (message, title) {
         if (navigator.notification) {
             navigator.notification.alert(message, null, title, 'OK');
@@ -49,6 +56,7 @@ var app = {
             });
         }
 		$(window).on('hashchange', $.proxy(this.route, this));
+		$(document).on('deviceready', , $.proxy(this.onDeviceReady, this));
     },
 
 	slidePage: function(page) {
@@ -94,9 +102,6 @@ var app = {
         var self = this;
 		this.detailsURL = /^#employees\/(\d{1,})/;
 		this.registerEvents();
-        this.store = new SQLiteStore(function() {
-            self.route();
-        });
     }
 };
 
